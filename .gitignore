@@ -41,9 +41,11 @@ htmlcov/
 *.cover
 
 # Environment
-.env
+app/.env
 .env.local
 
 # Project specific
 *.log
 .claude/
+
+*.pdf
