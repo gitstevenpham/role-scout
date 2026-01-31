@@ -3,7 +3,14 @@ Job Extractor Test Runner
 Run this script directly in PyCharm to test job extractors.
 """
 
-from extractors import extract_job_description
+import sys
+from pathlib import Path
+
+# Add project root to Python path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from app.extractors.factory import extract_job_description
 
 
 def run_url(platform: str, url: str):
@@ -57,7 +64,7 @@ def main():
     test_cases = [
         ("Ashby (ST Labs)", "https://jobs.ashbyhq.com/st-labs/8cc33e27-fe89-41b8-95e4-9f47540ea8d4"),
         ("Greenhouse (Anthropic)", "https://job-boards.greenhouse.io/anthropic/jobs/5077227008"),
-        ("LinkedIn", "https://www.linkedin.com/jobs/collections/recommended/?currentJobId=4265031115"),
+        ("LinkedIn (Gusto)", "https://www.linkedin.com/jobs/view/4265031115"),
     ]
 
     results = []

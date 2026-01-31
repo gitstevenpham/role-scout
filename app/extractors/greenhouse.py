@@ -22,19 +22,15 @@ class GreenhouseExtractor(BaseJobExtractor):
 
             soup = BeautifulSoup(response.text, "html.parser")
 
-            # Greenhouse uses specific div IDs for job content
-            job_content = soup.find("div", {"id": "content"})
-            if not job_content:
-                job_content = soup.find("div", class_="application")
-
-            if not job_content:
-                # Try to find the main content section
-                job_content = soup.find("section", class_=lambda x: x and "job" in x.lower())
+            # Greenhouse uses job-post-container class
+            job_content = soup.find("div", class_="job-post-container")
 
             if job_content:
-                # Remove application form if present
+                # Remove application form and other non-job-description elements
                 for form in job_content.find_all("form"):
                     form.decompose()
+                for app in job_content.find_all("div", {"id": "application"}):
+                    app.decompose()
 
                 return job_content.get_text(separator="\n", strip=True)
 
