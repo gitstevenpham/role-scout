@@ -39,6 +39,55 @@ class LinkedInExtractor(BaseJobExtractor):
 
         return None
 
+    def get_company_name(self, url: str) -> Optional[str]:
+        """
+        Extract company name from LinkedIn job listing.
+
+        Args:
+            url: LinkedIn job URL
+
+        Returns:
+            Company name or None if extraction fails
+        """
+        try:
+            normalized_url = self._normalize_url(url)
+            if not normalized_url:
+                return None
+
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+            }
+
+            with httpx.Client() as client:
+                response = client.get(
+                    normalized_url, headers=headers, follow_redirects=True, timeout=10.0
+                )
+                response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, "html.parser")
+
+            # Try to find company name in various locations
+            # Method 1: Look for company link/name in the job card
+            company_link = soup.find("a", class_=lambda x: x and "topcard__org-name-link" in str(x))
+            if company_link:
+                return company_link.get_text(strip=True)
+
+            # Method 2: Look for subtitle with company info
+            company_subtitle = soup.find("span", class_=lambda x: x and "topcard__flavor" in str(x))
+            if company_subtitle:
+                return company_subtitle.get_text(strip=True)
+
+            # Method 3: Look for any element with company name pattern
+            company_div = soup.find("div", class_=lambda x: x and "company" in str(x).lower())
+            if company_div:
+                return company_div.get_text(strip=True)
+
+            return None
+
+        except Exception as e:
+            print(f"Error extracting company name from LinkedIn: {e}")
+            return None
+
     def extract(self, url: str) -> Optional[str]:
         """Extract job description from LinkedIn job listing."""
         try:

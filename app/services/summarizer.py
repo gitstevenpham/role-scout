@@ -9,18 +9,17 @@ from app.extractors import extract_job_description
 
 JOB_SUMMARY_PROMPT = """Analyze the following job listing and return a structured summary.
 Extract:
-1. Job title
-2. Company (if mentioned)
-3. A brief summary of the role (2-3 sentences)
-4. Required skills / qualifications (bulleted list)
-5. Nice-to-have / preferred skills (bulleted list, if any)
+1. A brief summary of the role (2-3 sentences)
+2. Programming Languages / Frameworks - (Highlight python, flask, fastapi, react, typescript by adding a star emoji next to them if they exist in the job description)
+3. Required skills / qualifications (bulleted list)
+4. Nice-to-have / preferred skills (bulleted list, if any)
 
 Job listing content:
 {content}"""
 
 
 def get_llm_client() -> tuple[AsyncOpenAI, str]:
-    """Get configured LLM client and model name."""
+    """Get a configured LLM client and model name."""
     if settings.llm_provider == "openai":
         return AsyncOpenAI(api_key=settings.openai_api_key), settings.openai_model
     return (

@@ -43,13 +43,7 @@ class JobFitResponse(BaseModel):
     """Job fit analysis result."""
 
     url: str
-    job_title: str
-    company: str
-    fit_score: str
-    matching_qualifications: list[str]
-    gaps: list[str]
-    recommendation: str
-    detailed_analysis: str
+    analysis: str
 
 
 class HealthResponse(BaseModel):

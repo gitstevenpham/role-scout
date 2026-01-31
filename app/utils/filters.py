@@ -28,7 +28,9 @@ def is_engineering_role(title: str) -> bool:
         "ios",
         "mobile",
         "devops",
-        "security"
+        "principal",
+        "security",
+        "staff"
     ]
 
     title_lower = title.lower()

@@ -21,9 +21,10 @@ JOB DESCRIPTION:
 
 Please analyze how well this candidate matches the job requirements and provide a structured analysis in the following format:
 
-JOB TITLE: [Extract the job title]
-COMPANY: [Extract the company name]
 FIT SCORE: [Choose one: "Strong Match" | "Moderate Match" | "Weak Match" | "Poor Match"]
+
+RECOMMENDATION:
+[Write 2-3 sentences with your overall recommendation on whether they should apply and what to emphasize]
 
 MATCHING QUALIFICATIONS:
 - [First matching qualification]
@@ -35,13 +36,9 @@ GAPS:
 - [Second gap or missing skill]
 - [Continue for all significant gaps]
 
-RECOMMENDATION:
-[Write 2-3 sentences with your overall recommendation on whether they should apply and what to emphasize]
-
 DETAILED ANALYSIS:
 [Write 2-3 paragraphs providing a thorough analysis of the fit, including specific examples from both the resume and job description]
 """
-
 
 def load_resume_from_config() -> str:
     """
@@ -99,99 +96,6 @@ def load_resume_from_config() -> str:
     return resume_text
 
 
-def parse_fit_analysis(llm_response: str) -> dict:
-    """
-    Parse structured LLM response into dictionary.
-
-    Args:
-        llm_response: Raw LLM response text
-
-    Returns:
-        Dictionary with parsed sections
-
-    Raises:
-        HTTPException: If parsing fails
-    """
-    try:
-        # Extract job title
-        job_title_match = re.search(
-            r"JOB TITLE:\s*(.+?)(?:\n|$)", llm_response, re.IGNORECASE
-        )
-        job_title = job_title_match.group(1).strip() if job_title_match else "Unknown"
-
-        # Extract company
-        company_match = re.search(
-            r"COMPANY:\s*(.+?)(?:\n|$)", llm_response, re.IGNORECASE
-        )
-        company = company_match.group(1).strip() if company_match else "Unknown"
-
-        # Extract fit score
-        fit_score_match = re.search(
-            r"FIT SCORE:\s*(.+?)(?:\n|$)", llm_response, re.IGNORECASE
-        )
-        fit_score = (
-            fit_score_match.group(1).strip() if fit_score_match else "Moderate Match"
-        )
-
-        # Extract matching qualifications
-        matching_section = re.search(
-            r"MATCHING QUALIFICATIONS:\s*\n((?:[-•*]\s*.+\n?)+)",
-            llm_response,
-            re.IGNORECASE,
-        )
-        matching_qualifications = []
-        if matching_section:
-            matches = re.findall(r"[-•*]\s*(.+)", matching_section.group(1))
-            matching_qualifications = [m.strip() for m in matches]
-
-        # Extract gaps
-        gaps_section = re.search(
-            r"GAPS:\s*\n((?:[-•*]\s*.+\n?)+)", llm_response, re.IGNORECASE
-        )
-        gaps = []
-        if gaps_section:
-            gap_matches = re.findall(r"[-•*]\s*(.+)", gaps_section.group(1))
-            gaps = [g.strip() for g in gap_matches]
-
-        # Extract recommendation
-        recommendation_match = re.search(
-            r"RECOMMENDATION:\s*\n(.+?)(?=\n\n|\nDETAILED ANALYSIS:|\Z)",
-            llm_response,
-            re.IGNORECASE | re.DOTALL,
-        )
-        recommendation = (
-            recommendation_match.group(1).strip()
-            if recommendation_match
-            else "Apply if interested."
-        )
-
-        # Extract detailed analysis
-        detailed_match = re.search(
-            r"DETAILED ANALYSIS:\s*\n(.+)", llm_response, re.IGNORECASE | re.DOTALL
-        )
-        detailed_analysis = (
-            detailed_match.group(1).strip()
-            if detailed_match
-            else "Analysis not available."
-        )
-
-        return {
-            "job_title": job_title,
-            "company": company,
-            "fit_score": fit_score,
-            "matching_qualifications": matching_qualifications,
-            "gaps": gaps,
-            "recommendation": recommendation,
-            "detailed_analysis": detailed_analysis,
-        }
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to parse LLM response: {str(e)}",
-        )
-
-
 async def analyze_job_fit(url: str, resume_text: str | None = None) -> dict:
     """
     Analyze how well a job matches the candidate's resume.
@@ -236,10 +140,7 @@ async def analyze_job_fit(url: str, resume_text: str | None = None) -> dict:
 
     llm_response = response.choices[0].message.content
 
-    # Parse LLM response
-    analysis = parse_fit_analysis(llm_response)
-
-    # Add the URL to the result
-    analysis["url"] = url
-
-    return analysis
+    return {
+        "url": url,
+        "analysis": llm_response,
+    }
