@@ -6,6 +6,7 @@ from .linkedin import LinkedInExtractor
 from .lever import LeverExtractor
 from .workday import WorkdayExtractor
 from .rippling import RipplingExtractor
+from .generic import GenericExtractor
 from .base import BaseJobExtractor
 from app.schemas.job import JobListing
 from app.utils.filters import is_engineering_role
@@ -18,6 +19,7 @@ EXTRACTORS: list[type[BaseJobExtractor]] = [
     LeverExtractor,
     WorkdayExtractor,
     RipplingExtractor,
+    GenericExtractor,  # Fallback extractor - must be last
 ]
 
 
