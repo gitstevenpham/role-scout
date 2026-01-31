@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from openai import AsyncOpenAI
+from pydantic import BaseModel
 
 from config import settings
 
@@ -32,6 +33,34 @@ async def chat(message: str = "hello world"):
         "model": model,
         "message": message,
         "reply": response.choices[0].message.content,
+    }
+
+
+JOB_SUMMARY_PROMPT = """Analyze the following job listing and return a structured summary.
+Extract:
+1. Job title
+2. Company (if mentioned)
+3. A brief summary of the role (2-3 sentences)
+4. Required skills / qualifications (bulleted list)
+5. Nice-to-have / preferred skills (bulleted list, if any)
+
+Job listing content:
+{content}"""
+
+
+class JobContentRequest(BaseModel):
+    content: str
+
+
+@app.post("/summarize-job")
+async def summarize_job(req: JobContentRequest):
+    client, model = get_llm_client()
+    response = await client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": JOB_SUMMARY_PROMPT.format(content=req.content)}],
+    )
+    return {
+        "summary": response.choices[0].message.content,
     }
 
 
