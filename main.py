@@ -57,7 +57,9 @@ async def summarize_job(req: JobContentRequest):
     client, model = get_llm_client()
     response = await client.chat.completions.create(
         model=model,
-        messages=[{"role": "user", "content": JOB_SUMMARY_PROMPT.format(content=req.content)}],
+        messages=[
+            {"role": "user", "content": JOB_SUMMARY_PROMPT.format(content=req.content)}
+        ],
     )
     return {
         "summary": response.choices[0].message.content,
