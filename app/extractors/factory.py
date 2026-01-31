@@ -40,7 +40,7 @@ def extract_job_description(url: str) -> Optional[str]:
 
 
 def list_company_engineering_jobs(
-    url: str, limit: int = 20
+    url: str
 ) -> tuple[str, list[JobListing]]:
     """
     List engineering jobs from the same company as the given job URL.
@@ -68,7 +68,7 @@ def list_company_engineering_jobs(
             ]
 
             # Limit the results
-            limited_jobs = engineering_jobs[:limit]
+            limited_jobs = engineering_jobs
 
             return (company_name, limited_jobs)
 

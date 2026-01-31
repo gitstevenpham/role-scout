@@ -71,5 +71,5 @@ async def get_company_engineering_jobs(req: JobUrlRequest):
     - total_jobs: The number of engineering jobs found
     - engineering_jobs: List of job listings with title, URL, and location
     """
-    company, jobs = list_company_engineering_jobs(str(req.url), limit=20)
+    company, jobs = list_company_engineering_jobs(str(req.url))
     return {"company": company, "total_jobs": len(jobs), "engineering_jobs": jobs}

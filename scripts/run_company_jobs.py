@@ -17,7 +17,7 @@ def run_extractor(name: str, url: str):
     print(f"{'=' * 80}")
 
     try:
-        company, jobs = list_company_engineering_jobs(url, limit=20)
+        company, jobs = list_company_engineering_jobs(url)
         print(f"\n✓ Company: {company}")
         print(f"✓ Found {len(jobs)} engineering jobs")
 
@@ -42,10 +42,10 @@ def main():
 
     # Test cases for each platform
     test_cases = [
-        (
-            "Ashby",
-            "https://jobs.ashbyhq.com/st-labs/8cc33e27-fe89-41b8-95e4-9f47540ea8d4",
-        ),
+        # (
+        #     "Ashby",
+        #     "https://jobs.ashbyhq.com/st-labs/8cc33e27-fe89-41b8-95e4-9f47540ea8d4",
+        # ),
         (
             "Greenhouse",
             "https://job-boards.greenhouse.io/anthropic/jobs/5077227008",

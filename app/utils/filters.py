@@ -13,23 +13,28 @@ def is_engineering_role(title: str) -> bool:
     """
     keywords = [
         "software",
-        "engineer",
-        "developer",
+        # "engineer",
+        # "developer",
         "backend",
         "frontend",
         "full-stack",
         "fullstack",
-        "sre",
+        # "data engineer",
+        # "platform",
+    ]
+
+    blacklist = [
+        "android",
+        "ios",
+        "mobile",
         "devops",
-        "machine learning",
-        "data engineer",
-        "platform",
-        "infrastructure",
-        "web",
-        "test",
-        "programmer",
-        "coding",
+        "security"
     ]
 
     title_lower = title.lower()
+
+    # Check if title contains blacklisted keywords
+    if any(keyword in title_lower for keyword in blacklist):
+        return False
+
     return any(keyword in title_lower for keyword in keywords)
