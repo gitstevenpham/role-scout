@@ -16,6 +16,22 @@ class JobSummaryResponse(BaseModel):
     summary: str
 
 
+class JobListing(BaseModel):
+    """A single job listing."""
+
+    title: str
+    url: str
+    location: str | None = None
+
+
+class CompanyJobsResponse(BaseModel):
+    """Response model for company job listings."""
+
+    company: str
+    total_jobs: int
+    engineering_jobs: list[JobListing]
+
+
 class HealthResponse(BaseModel):
     """Health check response."""
 
