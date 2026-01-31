@@ -1,0 +1,9 @@
+# Ignore all resume files
+*.pdf
+*.txt
+*.md
+*.docx
+*.doc
+
+# Allow example files
+!resume.example.txt

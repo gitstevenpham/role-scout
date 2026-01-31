@@ -7,8 +7,11 @@ from app.schemas.job import (
     JobSummaryResponse,
     HealthResponse,
     CompanyJobsResponse,
+    JobFitRequest,
+    JobFitResponse,
 )
 from app.services.summarizer import summarize_job_from_url, get_llm_client
+from app.services.job_fit_analyzer import analyze_job_fit
 from app.extractors.factory import list_company_engineering_jobs
 from app.config import settings
 
@@ -73,3 +76,24 @@ async def get_company_engineering_jobs(req: JobUrlRequest):
     """
     company, jobs = list_company_engineering_jobs(str(req.url))
     return {"company": company, "total_jobs": len(jobs), "engineering_jobs": jobs}
+
+
+@router.post("/analyze-job-fit", response_model=JobFitResponse)
+async def analyze_job_fit_endpoint(req: JobFitRequest):
+    """
+    Analyze how well a job matches the candidate's resume.
+
+    Compares job description against resume and provides fit analysis including:
+    - Fit score (Strong/Moderate/Weak/Poor Match)
+    - Matching qualifications
+    - Skills gaps
+    - Application recommendation
+    - Detailed analysis
+
+    Supports all ATS platforms: Ashby, Greenhouse, LinkedIn, Lever, Workday, Rippling
+
+    The resume is loaded from the path configured in RESUME_PATH environment variable,
+    or you can provide resume_text in the request body to override.
+    """
+    analysis = await analyze_job_fit(str(req.url), req.resume_text)
+    return JobFitResponse(**analysis)

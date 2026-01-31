@@ -1,0 +1,36 @@
+# Example Resume Format
+
+## Contact Information
+John Doe
+john.doe@example.com
+linkedin.com/in/johndoe
+
+## Summary
+Experienced Software Engineer with 5+ years in backend development, specializing in Python and distributed systems.
+
+## Skills
+- Languages: Python, JavaScript, SQL, Go
+- Frameworks: FastAPI, Django, Flask, React
+- Technologies: Docker, Kubernetes, PostgreSQL, Redis, AWS
+- Practices: Microservices, REST APIs, CI/CD, Agile
+
+## Experience
+
+### Senior Backend Engineer - Tech Corp (2021-Present)
+- Built scalable microservices using Python and FastAPI
+- Designed and implemented REST APIs serving 1M+ requests/day
+- Architected cloud infrastructure on AWS using ECS and Lambda
+- Mentored junior engineers and led code reviews
+
+### Software Engineer - StartupCo (2019-2021)
+- Developed backend services using Django and PostgreSQL
+- Implemented authentication and authorization systems
+- Optimized database queries reducing response time by 40%
+- Collaborated with frontend team on API design
+
+## Education
+B.S. Computer Science - University of Example (2019)
+
+## Certifications
+- AWS Certified Solutions Architect
+- Python Professional Certification

@@ -32,6 +32,26 @@ class CompanyJobsResponse(BaseModel):
     engineering_jobs: list[JobListing]
 
 
+class JobFitRequest(BaseModel):
+    """Request for job fit analysis."""
+
+    url: HttpUrl
+    resume_text: str | None = None
+
+
+class JobFitResponse(BaseModel):
+    """Job fit analysis result."""
+
+    url: str
+    job_title: str
+    company: str
+    fit_score: str
+    matching_qualifications: list[str]
+    gaps: list[str]
+    recommendation: str
+    detailed_analysis: str
+
+
 class HealthResponse(BaseModel):
     """Health check response."""
 
